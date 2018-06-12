@@ -28,7 +28,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1412301562087486
 GameObject:
   m_ObjectHideFlags: 0
@@ -66,7 +66,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4413269975310578
 Transform:
   m_ObjectHideFlags: 1
@@ -87,7 +87,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1412301562087486}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -3, y: 0, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_Children:
   - {fileID: 4956827235247818}
@@ -182,10 +182,10 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.06749616, y: -0.0015334368}
-      - {x: -0.18243094, y: 0.121774435}
-      - {x: 0.20408192, y: 0.12366926}
-      - {x: 0.051960375, y: -0.0016364972}
+    - - {x: -0.0009200096, y: -0.0015334369}
+      - {x: -0.20079675, y: 0.1194787}
+      - {x: 0.19949046, y: 0.11851001}
+      - {x: 0.19949046, y: 0.119843036}
 --- !u!114 &114128535341074534
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -210,10 +210,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0.1
+  dashSpeed: 0.45
   attackDuration: 0.5
+  dashDuration: 0.2
   attackCooldown: 0.5
+  dashCooldown: 1
+  colorDuration: 2.5
+  colorDurationOnDash: 4
   player: 1
-  team: {r: 0.078232765, g: 0, b: 1, a: 1}
+  team: 1
+  flag: {r: 0, g: 0, b: 0, a: 0}
   personnalField: {fileID: 114937405041081114}
   personnalBeam: {fileID: 114128535341074534}
 --- !u!114 &114805498600181906
@@ -365,7 +371,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 0.078232765, g: 0, b: 1, a: 1}
+  m_Color: {r: 0, g: 0.07855177, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
-    public float speed, attackDuration, attackCooldown;
+    public float speed, dashSpeed, attackDuration, dashDuration, attackCooldown, dashCooldown, colorDuration, colorDurationOnDash;
     public int player;
+    public int team;
     [HideInInspector]
-    public Color team;
-    private bool alive = true, cooldown = false;
+    public Color flag;
+    private bool alive = true, attackDown = false, dashDown = false;
+    private Vector2 currentDash = new Vector2(0, 0);
     public AttackScript personnalField, personnalBeam;
 
 
     // Use this for initialization
     void Start () {
-        team = GetComponent<SpriteRenderer>().color;
+        flag = GetComponent<SpriteRenderer>().color;
     }
 
     // Update is called once per frame
@@ -22,38 +24,83 @@ public class PlayerController : MonoBehaviour {
         if (alive)
         {
             Move();
-            if (Input.GetButtonDown("Attack" + player))
-            {
-                StartCoroutine(Shoot());
-            }
+            Act();   
+        }
+    }
+
+    private void Act()
+    {
+        float triggers = Input.GetAxis("AttackOrDash" + player);
+        if (Input.GetButtonDown("Attack" + player) || triggers < -0.1f)
+        {
+            StartCoroutine(Shoot());
+        }
+        if (Input.GetButtonDown("Dash" + player) || triggers > 0.1f)
+        {
+            StartCoroutine(Dash());
         }
     }
 
     public IEnumerator Shoot()
     {
-        if (!cooldown)
+        if (!attackDown)
         {
+            this.attackDown = true;
             personnalBeam.gameObject.SetActive(true);
-            personnalBeam.OnActivation();
             personnalField.gameObject.SetActive(true);
-            personnalField.OnActivation();
+            if (currentDash.x == 0 && currentDash.y == 0)
+            {
+                personnalBeam.OnActivation(team, flag, colorDuration);
+                personnalField.OnActivation(team, flag, colorDuration);
+            }
+            else
+            {
+                personnalBeam.OnActivation(team, flag, colorDurationOnDash);
+                personnalField.OnActivation(team, flag, colorDurationOnDash);
+            }
             yield return new WaitForSeconds(attackDuration);
-            this.cooldown = true;
             personnalBeam.gameObject.SetActive(false);
             personnalField.gameObject.SetActive(false);
             yield return new WaitForSeconds(attackCooldown);
-            this.cooldown = false;
+            this.attackDown = false;
         }
     }
 
     private void Move()
     {
-        Vector2 movement = new Vector2();
-        movement.x = Input.GetAxis("Horizontal" + player);
-        movement.y = Input.GetAxis("Vertical" + player);
-        movement.Normalize();
-        movement *= speed;
-        transform.Translate(movement);
+
+        if (currentDash.x == 0 && currentDash.y == 0)
+        {
+            Vector2 movement = new Vector2();
+            movement.x = Input.GetAxis("Horizontal" + player);
+            movement.y = Input.GetAxis("Vertical" + player);
+            movement.Normalize();
+            movement *= speed;
+            transform.Translate(movement);
+        }
+        else
+        {
+            transform.Translate(currentDash);
+        }
+
+    }
+
+    private IEnumerator Dash()
+    {
+        if (!dashDown)
+        {
+            this.dashDown = true;
+            currentDash = new Vector2();
+            currentDash.x = Input.GetAxis("Horizontal" + player);
+            currentDash.y = Input.GetAxis("Vertical" + player);
+            currentDash.Normalize();
+            currentDash *= dashSpeed;
+            yield return new WaitForSeconds(dashDuration);
+            currentDash = new Vector2(0, 0);
+            yield return new WaitForSeconds(dashCooldown-dashDuration);
+            this.dashDown = false;
+
+        }
     }
     
     private void OnCollisionEnter2D(Collision2D collider)
@@ -61,7 +108,7 @@ public class PlayerController : MonoBehaviour {
         BallBehavior script = collider.collider.GetComponent<BallBehavior>();
         if (script!=null)
         {
-            if (script.team != Color.clear && script.team!=this.team)
+            if (script.team != -1 && script.team!=this.team)
             {
                 this.Die();
             }

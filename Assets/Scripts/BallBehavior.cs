@@ -4,20 +4,28 @@ using UnityEngine;
 
 public class BallBehavior : MonoBehaviour {
 
-    public Color team=Color.clear;
+    public int team=-1;
 
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
     }
 
     // Update is called once per frame
     void Update () {
     }
 
-    public void OnShot(Color team)
+    public void OnShot(int team, Color flag, float resetTime)
     {
+        StartCoroutine(Reset(resetTime));
         this.team = team;
-        this.GetComponent<SpriteRenderer>().color = team;
+        this.GetComponent<SpriteRenderer>().color = flag;
+    }
+
+    public IEnumerator Reset(float resetTime)
+    {
+        yield return new WaitForSeconds(resetTime);
+        this.GetComponent<SpriteRenderer>().color = Color.clear;
+        this.team = -1;
     }
 }

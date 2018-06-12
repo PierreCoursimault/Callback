@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class AttackScript : MonoBehaviour {
 
-    private Color team;
+    private int team;
+    private Color flag;
     public float speed;
+    private float ballsColorDuration;
     private List<Collider2D> treatedColliders;
 
     // Use this for initialization
@@ -18,7 +20,6 @@ public class AttackScript : MonoBehaviour {
         {
             GetComponentInParent<PlayerController>().personnalBeam = this;
         }
-        this.team = GetComponentInParent<PlayerController>().team;
         treatedColliders = new List<Collider2D>();
         gameObject.SetActive(false);
     }
@@ -28,8 +29,11 @@ public class AttackScript : MonoBehaviour {
 		
 	}
 
-    public void OnActivation()
+    public void OnActivation(int team, Color flag, float ballsColorDuration)
     {
+        this.team = team;
+        this.flag = flag;
+        this.ballsColorDuration = ballsColorDuration;
         treatedColliders = new List<Collider2D>();
     }
 
@@ -38,7 +42,7 @@ public class AttackScript : MonoBehaviour {
         BallBehavior script = collider.GetComponent<BallBehavior>();
         if (script != null)
         {
-            script.OnShot(GetComponentInParent<PlayerController>().team);
+            script.OnShot(this.team, this.flag, ballsColorDuration);
             Vector2 movement = collider.transform.position - this.transform.position;
             movement.Normalize();
             movement*= speed*20;

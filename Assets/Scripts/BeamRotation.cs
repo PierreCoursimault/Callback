@@ -14,7 +14,6 @@ public class BeamRotation : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         Vector2 direction = new Vector2(Input.GetAxis("HorizontalDirection" + player), Input.GetAxis("VerticalDirection" + player));
-        Debug.Log(direction);
         transform.rotation = Quaternion.LookRotation(transform.forward, direction);
     }
 }
