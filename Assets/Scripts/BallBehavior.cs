@@ -25,7 +25,7 @@ public class BallBehavior : MonoBehaviour {
     public IEnumerator Reset(float resetTime)
     {
         yield return new WaitForSeconds(resetTime);
-        this.GetComponent<SpriteRenderer>().color = Color.clear;
+		this.GetComponent<SpriteRenderer>().color = Color.white;
         this.team = -1;
     }
 }

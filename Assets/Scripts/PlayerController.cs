@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
-    public float speed, dashSpeed, attackDuration, dashDuration, attackCooldown, dashCooldown, colorDuration, colorDurationOnDash;
+    public float maxspeed,AForce,DForce, dashSpeed, attackDuration, dashDuration, attackCooldown, dashCooldown, colorDuration, colorDurationOnDash;
     public int player;
     public int team;
     [HideInInspector]
@@ -12,12 +12,20 @@ public class PlayerController : MonoBehaviour {
     private bool alive = true, attackDown = false, dashDown = false;
     private Vector2 currentDash = new Vector2(0, 0);
     public AttackScript personnalField, personnalBeam;
+	private Vector2 v,zero;
+	private Rigidbody2D myRb2D;
 
 
     // Use this for initialization
     void Start () {
         flag = GetComponent<SpriteRenderer>().color;
+		myRb2D = GetComponent<Rigidbody2D> ();
     }
+
+	void Update () {
+		v = new Vector2(Input.GetAxis("Horizontal"+ player), Input.GetAxis("Vertical"+ player));
+		zero = new Vector2(0,0);
+	}
 
     // Update is called once per frame
     void FixedUpdate () {
@@ -71,12 +79,20 @@ public class PlayerController : MonoBehaviour {
 
         if (currentDash.x == 0 && currentDash.y == 0)
         {
-            Vector2 movement = new Vector2();
+			if(v == zero){
+				myRb2D.velocity = myRb2D.velocity * DForce;
+			}
+			else{
+				myRb2D.velocity = Vector2.ClampMagnitude (myRb2D.velocity, maxspeed);
+				myRb2D.AddForce(v.normalized * AForce);
+			}
+
+            /*Vector2 movement = new Vector2();
             movement.x = Input.GetAxis("Horizontal" + player);
             movement.y = Input.GetAxis("Vertical" + player);
             movement.Normalize();
             movement *= speed;
-            transform.Translate(movement);
+            transform.Translate(movement);*/
         }
         else
         {
@@ -90,9 +106,7 @@ public class PlayerController : MonoBehaviour {
         if (!dashDown)
         {
             this.dashDown = true;
-            currentDash = new Vector2();
-            currentDash.x = Input.GetAxis("Horizontal" + player);
-            currentDash.y = Input.GetAxis("Vertical" + player);
+			currentDash = v;
             currentDash.Normalize();
             currentDash *= dashSpeed;
             yield return new WaitForSeconds(dashDuration);
