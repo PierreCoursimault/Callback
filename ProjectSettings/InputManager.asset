@@ -15,7 +15,7 @@ InputManager:
     altPositiveButton: 
     gravity: 0
     dead: 0.19
-    sensitivity: 0.5
+    sensitivity: 1
     snap: 0
     invert: 0
     type: 2
@@ -31,7 +31,7 @@ InputManager:
     altPositiveButton: 
     gravity: 0
     dead: 0.19
-    sensitivity: 0.5
+    sensitivity: 1
     snap: 0
     invert: 0
     type: 2
@@ -47,7 +47,7 @@ InputManager:
     altPositiveButton: 
     gravity: 0
     dead: 0.19
-    sensitivity: 0.5
+    sensitivity: 1
     snap: 0
     invert: 0
     type: 2
@@ -63,7 +63,7 @@ InputManager:
     altPositiveButton: 
     gravity: 0
     dead: 0.19
-    sensitivity: 0.5
+    sensitivity: 1
     snap: 0
     invert: 0
     type: 2
@@ -79,7 +79,7 @@ InputManager:
     altPositiveButton: 
     gravity: 0
     dead: 0.19
-    sensitivity: 0.5
+    sensitivity: 1
     snap: 0
     invert: 1
     type: 2
@@ -95,7 +95,7 @@ InputManager:
     altPositiveButton: 
     gravity: 0
     dead: 0.19
-    sensitivity: 0.5
+    sensitivity: 1
     snap: 0
     invert: 1
     type: 2
@@ -111,7 +111,7 @@ InputManager:
     altPositiveButton: 
     gravity: 0
     dead: 0.19
-    sensitivity: 0.5
+    sensitivity: 1
     snap: 0
     invert: 1
     type: 2
@@ -127,7 +127,7 @@ InputManager:
     altPositiveButton: 
     gravity: 0
     dead: 0.19
-    sensitivity: 0.5
+    sensitivity: 1
     snap: 0
     invert: 1
     type: 2
@@ -453,3 +453,35 @@ InputManager:
     type: 2
     axis: 2
     joyNum: 4
+  - serializedVersion: 3
+    m_Name: Submit
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: joystick 1 button 0
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 0
+    dead: 0.19
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 1
+  - serializedVersion: 3
+    m_Name: Cancel
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: joystick 1 button 1
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 0
+    dead: 0.19
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 1
