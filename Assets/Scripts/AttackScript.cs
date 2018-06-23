@@ -6,9 +6,11 @@ public class AttackScript : MonoBehaviour {
 
     private int team;
     private Color flag;
-    public float speed;
-    private float ballsColorDuration;
-    private List<Collider2D> treatedColliders;
+    public bool dashing;
+    public float ballSpeed;
+    public float ballsColorDuration;
+    private List<Collider> treatedColliders;
+
 
     // Use this for initialization
     void Start () {
@@ -20,46 +22,47 @@ public class AttackScript : MonoBehaviour {
         {
             GetComponentInParent<PlayerController>().personnalBeam = this;
         }
-        treatedColliders = new List<Collider2D>();
+        treatedColliders = new List<Collider>();
         gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
-
-    public void OnActivation(int team, Color flag, float ballsColorDuration)
+    public void OnActivation(int team, Color flag, bool dashing)
     {
         this.team = team;
         this.flag = flag;
-        this.ballsColorDuration = ballsColorDuration;
-        treatedColliders = new List<Collider2D>();
+        this.dashing = dashing;
+        treatedColliders = new List<Collider>();
     }
 
-    private void OnTriggerEnter2D(Collider2D collider)
+    private void OnTriggerEnter(Collider collider)
     {
         BallBehavior script = collider.GetComponent<BallBehavior>();
         if (script != null)
         {
             script.OnShot(this.team, this.flag, ballsColorDuration);
-            Vector2 movement = collider.transform.position - this.transform.position;
+            Vector3 movement = collider.transform.position - this.transform.position;
             movement.Normalize();
-            movement*= speed*20;
-            collider.GetComponent<Rigidbody2D>().AddForce(movement);
-            Debug.Log(collider.GetComponent<Rigidbody2D>().velocity);
+            if (dashing)
+            {
+                movement *= 2*ballSpeed;
+            }
+            else
+            {
+                movement *= ballSpeed;
+            }
+            collider.GetComponent<Rigidbody>().AddForce(movement);
         }
     }
 
-    private void OnTriggerStay2D(Collider2D collider)
+    private void OnTriggerStay(Collider collider)
     {
         if (!treatedColliders.Contains(collider))
         {
-            OnTriggerEnter2D(collider);
+            OnTriggerEnter(collider);
         }
     }
 
-    private void OnTriggerExit2D(Collider2D collider)
+    private void OnTriggerExit(Collider collider)
     {
         treatedColliders.Remove(collider);
     }

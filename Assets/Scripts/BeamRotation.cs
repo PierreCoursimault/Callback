@@ -6,6 +6,7 @@ public class BeamRotation : MonoBehaviour {
 
     private int player;
 
+
 	// Use this for initialization
 	void Start () {
         this.player = GetComponentInParent<PlayerController>().player;
@@ -13,7 +14,7 @@ public class BeamRotation : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        Vector2 direction = new Vector2(Input.GetAxis("HorizontalDirection" + player), Input.GetAxis("VerticalDirection" + player));
+        Vector3 direction = new Vector3(Input.GetAxis("HorizontalDirection" + player), Input.GetAxis("VerticalDirection" + player), 0);
         transform.rotation = Quaternion.LookRotation(transform.forward, direction);
     }
 }

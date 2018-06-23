@@ -7,25 +7,26 @@ public class BallBehavior : MonoBehaviour {
     public int team=-1;
 
 
-    // Use this for initialization
-    void Start () {
-    }
-
-    // Update is called once per frame
-    void Update () {
-    }
-
     public void OnShot(int team, Color flag, float resetTime)
     {
-        StartCoroutine(Reset(resetTime));
+        StartCoroutine(ProgrammReset(resetTime));
         this.team = team;
-        this.GetComponent<SpriteRenderer>().color = flag;
+        this.GetComponent<MeshRenderer>().material.color = flag;
     }
 
-    public IEnumerator Reset(float resetTime)
+    private IEnumerator ProgrammReset(float resetTime)
     {
         yield return new WaitForSeconds(resetTime);
-		this.GetComponent<SpriteRenderer>().color = Color.white;
+        Reset();
+    }
+
+    public void Reset()
+    {
+        this.GetComponent<MeshRenderer>().material.color = Color.white;
         this.team = -1;
     }
+
+
+
+
 }
