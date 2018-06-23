@@ -232,7 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8f0c318a953204478412c05af38a250, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movespeed: 4.3
+  movespeed: 2.15
   dashSpeed: 10
   attackDuration: 0.5
   dashDuration: 0.1

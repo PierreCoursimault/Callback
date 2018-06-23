@@ -147,6 +147,6 @@ public class ScoreManager : MonoBehaviour {
     private IEnumerator ChangeLevel()
     {
         yield return new WaitForSeconds(2.5f);
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(nextlevel);
     }
 }

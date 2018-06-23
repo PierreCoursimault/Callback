@@ -9,15 +9,18 @@ public class BallBehavior : MonoBehaviour {
 
     public void OnShot(int team, Color flag, float resetTime)
     {
-        StartCoroutine(ProgrammReset(resetTime));
+        StartCoroutine(ProgrammReset(flag, resetTime));
         this.team = team;
         this.GetComponent<MeshRenderer>().material.color = flag;
     }
 
-    private IEnumerator ProgrammReset(float resetTime)
+    private IEnumerator ProgrammReset(Color flag, float resetTime)
     {
         yield return new WaitForSeconds(resetTime);
-        Reset();
+        if (flag == this.GetComponent<MeshRenderer>().material.color)
+        {
+            Reset();
+        }
     }
 
     public void Reset()
@@ -25,8 +28,4 @@ public class BallBehavior : MonoBehaviour {
         this.GetComponent<MeshRenderer>().material.color = Color.white;
         this.team = -1;
     }
-
-
-
-
 }
