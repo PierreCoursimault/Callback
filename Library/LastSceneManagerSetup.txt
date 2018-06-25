@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Levels/TestLevel.unity
+- path: Assets/Scenes/Levels/Map_Ellipse.unity
   isLoaded: 1
   isActive: 1
