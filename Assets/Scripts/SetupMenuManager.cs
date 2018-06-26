@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class SetupMenuManager : MonoBehaviour {
 
@@ -9,14 +10,16 @@ public class SetupMenuManager : MonoBehaviour {
 	public GameObject[] modeBtn;
 	public GameObject[] levelBtn;
 	public GameObject[] entitiesBtn;
-	public string[] levels;
+	public string[] levelsName;
 	public Color highlight;
 	public Color unlight;
 	private int mode=0;
 	private int level=0;
 	private int entities=0;
 	private int current=0;
-
+	private string modePPKey = "Mode" ;
+	private string lvlPPKey = "Level" ;
+	private string entitiesPPKey = "Entities" ;
 
 	// Use this for initialization
 	void Start () {
@@ -25,27 +28,12 @@ public class SetupMenuManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if(Input.GetButtonDown("Valider")){
+			LaunchGame();
+		}
 	}
 		
 
-	public void Cancel(){
-		Debug.Log ("Current: " + current);
-		switch (current) {
-		case 0:
-			Debug.Log ("Back To Title Screen");
-			break;
-		case 1:
-			SelectMode ();
-			break;
-		case 2:
-			SelectLevel ();
-			break;		
-		default:
-			break;
-		}
-		current--;
-	}
 	public void ValidMode(int mod){
 		modeBtn [mode].GetComponent<TextMenuScript>().unlightText();
 		mode = mod;
@@ -72,13 +60,19 @@ public class SetupMenuManager : MonoBehaviour {
 	}
 
 	void SaveSetup(){
-		Debug.Log (mode + ";" + level + ";" + entities);
+		PlayerPrefs.SetInt(modePPKey,mode);
+		PlayerPrefs.SetInt(lvlPPKey,level);
+		PlayerPrefs.SetInt(entitiesPPKey,entities);
 	}
 
 	void LoadSetup(){
-		ValidMode (0);
-		ValidLevel (1);
-		ValidEntities (2);
+		mode = PlayerPrefs.GetInt (modePPKey);
+		level = PlayerPrefs.GetInt (lvlPPKey);
+		entities = PlayerPrefs.GetInt (entitiesPPKey);
+		Debug.Log (mode + ";" + level + ";" + entities);
+		ValidMode (mode);
+		ValidLevel (level);
+		ValidEntities (entities);
 		UnlightAll ();
 		SelectMode ();
 
@@ -105,5 +99,29 @@ public class SetupMenuManager : MonoBehaviour {
 		TexteMenu [0].color = unlight;
 		TexteMenu [1].color = unlight;
 		TexteMenu [2].color = unlight;
+	}
+
+	public void Cancel(){
+		Debug.Log ("Current: " + current);
+		switch (current) {
+		case 0:
+			Debug.Log ("Back To Title Screen");
+			break;
+		case 1:
+			SelectMode ();
+			break;
+		case 2:
+			SelectLevel ();
+			break;		
+		default:
+			break;
+		}
+		current--;
+	}
+
+	public void LaunchGame(){
+		SaveSetup ();
+		//SceneManager.LoadScene (levelsName, LoadSceneMode.Single);
+		SceneManager.LoadScene("TestLevel");
 	}
 }
