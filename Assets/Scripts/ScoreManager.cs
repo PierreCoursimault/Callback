@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -9,12 +10,14 @@ public class ScoreManager : MonoBehaviour {
 
 
     public int goal;
+    public float freezeDuration, freezeIntensity;
+    public string nextlevel;
     private Dictionary<PlayerController, int> players=new Dictionary<PlayerController, int>();
     private Dictionary<int, int> teams = new Dictionary<int, int>();
     private List<Text> scoreTexts = new List<Text>();
     private List<Text> healthTexts = new List<Text>();
     private Text centralDisplay;
-    public string nextlevel;
+    private bool waitingForA=false;
 
 
     // Use this for initialization
@@ -58,6 +61,17 @@ public class ScoreManager : MonoBehaviour {
                     scoreTexts.Add(text);
                     break;
                 }
+            }
+        }
+    }
+
+    public void FixedUpdate()
+    {
+        if (waitingForA)
+        {
+            if(Input.GetButtonDown("Validate1") || Input.GetButtonDown("Validate2") || Input.GetButtonDown("Validate3") || Input.GetButtonDown("Validate4"))
+            {
+                ChangeLevel();
             }
         }
     }
@@ -139,14 +153,56 @@ public class ScoreManager : MonoBehaviour {
 
     public void Win(string winner)
     {
-        centralDisplay.text = winner + " wins !";
+        centralDisplay.text = winner + " wins !\n\n\nScore :\n\n";
+        IEnumerable<KeyValuePair<int, int>> query=teams.OrderByDescending(t => t.Value);
+        foreach (KeyValuePair<int, int> team in query)
+        {
+            centralDisplay.text += "Team " + team.Key + " : " + team.Value+"\n\n";
+        }
+        TestPerfect();
         centralDisplay.color= new Color(centralDisplay.color.r, centralDisplay.color.g, centralDisplay.color.b, 1);
-        StartCoroutine(ChangeLevel());
+        waitingForA = true;
     }
 
-    private IEnumerator ChangeLevel()
+    private void TestPerfect()
     {
-        yield return new WaitForSeconds(2.5f);
+        int nbScoringTeams = 0;
+        foreach (int score in teams.Values)
+        {
+            if (score > 0)
+            {
+                nbScoringTeams++;
+            }
+        }
+        if (nbScoringTeams == 1)
+        {
+            if (teams.Count == 2)
+            {
+                centralDisplay.text = "PERFECT !!\n\n" + centralDisplay.text;
+            }
+            else
+            {
+                centralDisplay.text = "ULTRA PERFECT !!\n\n" + centralDisplay.text;
+            }
+                
+        }
+    }
+
+    private void ChangeLevel()
+    {
+        waitingForA = false;
         SceneManager.LoadScene(nextlevel);
+    }
+
+    public void Freeze()
+    {
+        Time.timeScale = 1-freezeIntensity;
+        StartCoroutine(EndFreeze());
+    }
+
+    private IEnumerator EndFreeze()
+    {
+        yield return new WaitForSeconds(freezeDuration*(1 - freezeIntensity));
+        Time.timeScale = 1;
     }
 }

@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour {
 	public int player, team, health, maxDashes;
 	[HideInInspector]
 	public Color flag;
-    private bool alive = true, attackDown = false, dashing = false;
+    private bool alive = true, attackDown = false, dashing = false, leftTriggerDown = false;
 	private Dash[] availableDashes;
     private int currentDash=0;
     [HideInInspector]
@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour {
             availableDashes[i] = new Dash(this);
         }
         scoreManager = Object.FindObjectOfType<ScoreManager>();
-
+        personnalBeam.GetComponent<Renderer>().enabled = false;
     }
 
 
@@ -56,23 +56,41 @@ public class PlayerController : MonoBehaviour {
 
     private void Act()
 	{
-		float triggers = Input.GetAxis("AttackOrDash" + player);
-		if (Input.GetButtonDown("Attack" + player) || triggers < -0.1f)
-		{
-            Vector3 orientation = new Vector3(Input.GetAxis("HorizontalDirection" + player), Input.GetAxis("VerticalDirection" + player), 0);
-            if (orientation == Vector3.zero)
+        Vector3 orientation = new Vector3(Input.GetAxis("HorizontalDirection" + player), Input.GetAxis("VerticalDirection" + player), 0);
+        float triggers = Input.GetAxis("AttackOrDash" + player);
+
+        if(triggers > 0.1f && !leftTriggerDown)
+        {
+            leftTriggerDown = true;
+            TryDash();
+        }
+        if (triggers < 0.1f)
+        {
+            leftTriggerDown = false;
+        }
+        if(Input.GetButtonDown("Dash" + player))
+        {
+            TryDash();
+        }
+        if (orientation == Vector3.zero)
+        {
+            personnalField.GetComponent<Renderer>().enabled = true;
+            personnalBeam.GetComponent<Renderer>().enabled = false;
+            if (Input.GetButtonDown("Attack" + player) || triggers < -0.1f)
             {
-			    StartCoroutine(ShootField());
+                StartCoroutine(ShootField());
             }
-            else
+        }
+        else
+        {
+            personnalField.GetComponent<Renderer>().enabled = false;
+            personnalBeam.GetComponent<Renderer>().enabled = true;
+            if (Input.GetButtonDown("Attack" + player) || triggers < -0.1f)
             {
                 StartCoroutine(ShootBeam());
             }
         }
-        if (Input.GetButtonDown("Dash" + player) || triggers > 0.1f)
-		{
-            TryDash();
-		}
+        
 	}
 
 	public IEnumerator ShootField()
@@ -80,11 +98,10 @@ public class PlayerController : MonoBehaviour {
 		if (!attackDown)
 		{
 			this.attackDown = true;
-			personnalField.gameObject.SetActive(true);
-			personnalField.OnActivation(team, flag, dashing);
+			personnalField.Activate(dashing);
 			yield return new WaitForSeconds(attackDuration);
-			personnalField.gameObject.SetActive(false);
-			yield return new WaitForSeconds(attackCooldown);
+            personnalField.Desactivate();
+            yield return new WaitForSeconds(attackCooldown);
 			this.attackDown = false;
 		}
 	}
@@ -95,9 +112,9 @@ public class PlayerController : MonoBehaviour {
         {
             this.attackDown = true;
             personnalBeam.gameObject.SetActive(true);
-            personnalBeam.OnActivation(team, flag, dashing);
+            personnalBeam.Activate(dashing);
             yield return new WaitForSeconds(attackDuration);
-            personnalBeam.gameObject.SetActive(false);
+            personnalBeam.Desactivate();
             yield return new WaitForSeconds(attackCooldown);
             this.attackDown = false;
         }
@@ -105,6 +122,7 @@ public class PlayerController : MonoBehaviour {
 
     private void TryDash()
 	{
+
 		if (availableDashes[currentDash].IsReady())
 		{
             StartCoroutine(availableDashes[currentDash].Launch());
@@ -121,6 +139,7 @@ public class PlayerController : MonoBehaviour {
                 scoreManager.UpdateScore(script.team, 1);
                 script.Reset();
                 scoreManager.UpdateHealth(this, -1);
+                scoreManager.Freeze();
 			}
 
 		}
@@ -129,7 +148,6 @@ public class PlayerController : MonoBehaviour {
 	public void Die()
 	{
 		alive = false;
-		Debug.Log("Player " + player + " died !");
 		Destroy(this.gameObject);
 	}
 

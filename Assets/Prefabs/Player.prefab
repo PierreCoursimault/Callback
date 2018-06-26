@@ -19,10 +19,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4554478845559594}
+  - component: {fileID: 114138380330450648}
   - component: {fileID: 33797474569844368}
   - component: {fileID: 23771401398781128}
   - component: {fileID: 135585948882214138}
-  - component: {fileID: 114138380330450648}
   m_Layer: 0
   m_Name: ForceField
   m_TagString: Untagged
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 114118928018754012}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60,8 +60,8 @@ GameObject:
   - component: {fileID: 4001876920869972}
   - component: {fileID: 114606254594145762}
   - component: {fileID: 114465894994200958}
-  - component: {fileID: 65614103582490252}
   - component: {fileID: 212084218055934076}
+  - component: {fileID: 65614103582490252}
   m_Layer: 0
   m_Name: ForceBeam
   m_TagString: Untagged
@@ -236,7 +236,7 @@ MonoBehaviour:
   dashSpeed: 10
   attackDuration: 0.5
   dashDuration: 0.1
-  attackCooldown: 0.5
+  attackCooldown: 0.2
   dashCooldown: 7
   colorDuration: 2.5
   colorDurationOnDash: 4
@@ -259,7 +259,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dashing: 0
-  ballSpeed: 1000
+  ballForce: 1500
+  ballDashForce: 3000
+  playerForce: 1000
+  playerDashForce: 1500
   ballsColorDuration: 3.5
 --- !u!114 &114465894994200958
 MonoBehaviour:
@@ -284,7 +287,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dashing: 0
-  ballSpeed: 1600
+  ballForce: 3000
+  ballDashForce: 7000
+  playerForce: 1500
+  playerDashForce: 3000
   ballsColorDuration: 3.5
 --- !u!135 &135585948882214138
 SphereCollider:

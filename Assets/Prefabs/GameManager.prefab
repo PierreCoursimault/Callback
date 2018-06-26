@@ -39,6 +39,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goal: -1
+  freezeDuration: 1
+  freezeIntensity: 0.9
   nextlevel: TestLevel
 --- !u!224 &224779686952557306
 RectTransform:
