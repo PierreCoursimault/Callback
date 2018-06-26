@@ -2,18 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class SetupMenuManager : MonoBehaviour {
 
-	public GameObject[] modeText;
-	public GameObject[] levelText;
-	public GameObject[] entitiesText;
-	public string[] levels;
-	private int mode;
-	private int level;
-	private int entities;
+	public UnityEngine.UI.Text[] TexteMenu;
+	public GameObject[] modeBtn;
+	public GameObject[] levelBtn;
+	public GameObject[] entitiesBtn;
+	public string[] levelsName;
+	public Color highlight;
+	public Color unlight;
+	private int mode=0;
+	private int level=0;
+	private int entities=0;
 	private int current=0;
-
+	private string modePPKey = "Mode" ;
+	private string lvlPPKey = "Level" ;
+	private string entitiesPPKey = "Entities" ;
 
 	// Use this for initialization
 	void Start () {
@@ -22,14 +28,77 @@ public class SetupMenuManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if(Input.GetButtonDown("Valider")){
+			LaunchGame();
+		}
 	}
 		
+
 	public void ValidMode(int mod){
-		Debug.Log (mod);
+		modeBtn [mode].GetComponent<TextMenuScript>().unlightText();
 		mode = mod;
-		current++;
-		EventSystem.current.SetSelectedGameObject (levelText[0]);
+		current=0;
+		modeBtn [mode].GetComponent<TextMenuScript> ().highlightText();
+		SaveSetup ();
+	}
+
+	public void ValidLevel(int lvl){
+		levelBtn [level].GetComponent<TextMenuScript> ().unlightText();
+		level = lvl;
+		current = 1;
+		levelBtn [level].GetComponent<TextMenuScript> ().highlightText();
+		SaveSetup ();
+	}
+
+	public void ValidEntities(int ent){
+		entitiesBtn[entities].GetComponent<TextMenuScript> ().unlightText();
+		entities = ent;
+		current = 2;
+		entitiesBtn[entities].GetComponent<TextMenuScript> ().highlightText();
+		SaveSetup ();
+
+	}
+
+	void SaveSetup(){
+		PlayerPrefs.SetInt(modePPKey,mode);
+		PlayerPrefs.SetInt(lvlPPKey,level);
+		PlayerPrefs.SetInt(entitiesPPKey,entities);
+	}
+
+	void LoadSetup(){
+		mode = PlayerPrefs.GetInt (modePPKey);
+		level = PlayerPrefs.GetInt (lvlPPKey);
+		entities = PlayerPrefs.GetInt (entitiesPPKey);
+		Debug.Log (mode + ";" + level + ";" + entities);
+		ValidMode (mode);
+		ValidLevel (level);
+		ValidEntities (entities);
+		UnlightAll ();
+		SelectMode ();
+
+
+	}
+
+	public void SelectMode(){
+		TexteMenu [current].color = unlight;
+		EventSystem.current.SetSelectedGameObject (modeBtn[mode]);
+		TexteMenu [0].color = highlight;
+	}
+	public void SelectLevel(){
+		TexteMenu [current].color = unlight;
+		EventSystem.current.SetSelectedGameObject (levelBtn[level]);
+		TexteMenu [1].color = highlight;
+	}
+	public void SelectEntities(){
+		TexteMenu [current].color = unlight;
+		EventSystem.current.SetSelectedGameObject (entitiesBtn[entities]);
+		TexteMenu [2].color = highlight;
+	}
+
+	private void UnlightAll(){
+		TexteMenu [0].color = unlight;
+		TexteMenu [1].color = unlight;
+		TexteMenu [2].color = unlight;
 	}
 
 	public void Cancel(){
@@ -39,10 +108,10 @@ public class SetupMenuManager : MonoBehaviour {
 			Debug.Log ("Back To Title Screen");
 			break;
 		case 1:
-			EventSystem.current.SetSelectedGameObject (modeText [mode]);
+			SelectMode ();
 			break;
 		case 2:
-			EventSystem.current.SetSelectedGameObject (levelText [level]);
+			SelectLevel ();
 			break;		
 		default:
 			break;
@@ -50,23 +119,9 @@ public class SetupMenuManager : MonoBehaviour {
 		current--;
 	}
 
-	public void ValidLevel(int lvl){
-		Debug.Log (lvl);
-		level = lvl;
-		current++;
-		EventSystem.current.SetSelectedGameObject (entitiesText[0]);
-	}
-
-	public void ValidEntities(int ent){
-		entities = ent;
+	public void LaunchGame(){
 		SaveSetup ();
-	}
-
-	void SaveSetup(){
-		Debug.Log (mode + ";" + level + ";" + entities);
-	}
-
-	void LoadSetup(){
-		
+		//SceneManager.LoadScene (levelsName, LoadSceneMode.Single);
+		SceneManager.LoadScene("TestLevel");
 	}
 }
