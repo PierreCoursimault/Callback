@@ -13,6 +13,10 @@ public class SetupMenuManager : MonoBehaviour {
 	public string[] levelsName;
 	public Color highlight;
 	public Color unlight;
+
+	public GameObject ControlPanel;
+	public UnityEngine.UI.Text ctrlText;
+
 	private int mode=0;
 	private int level=0;
 	private int entities=0;
@@ -20,16 +24,23 @@ public class SetupMenuManager : MonoBehaviour {
 	private string modePPKey = "Mode" ;
 	private string lvlPPKey = "Level" ;
 	private string entitiesPPKey = "Entities" ;
+	private bool seeCtrl;
 
 	// Use this for initialization
 	void Start () {
 		LoadSetup ();
+		SetControlPanel (false);
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if(Input.GetButtonDown("Valider")){
 			LaunchGame();
+		}
+
+		if(Input.GetKeyDown(KeyCode.Joystick1Button2)){
+			SetControlPanel(!seeCtrl);
 		}
 	}
 		
@@ -123,5 +134,15 @@ public class SetupMenuManager : MonoBehaviour {
 		SaveSetup ();
 		//SceneManager.LoadScene (levelsName, LoadSceneMode.Single);
 		SceneManager.LoadScene("TestLevel");
+	}
+
+	private void SetControlPanel(bool see){
+		ControlPanel.SetActive (see);
+		if (see) {
+			ctrlText.text = "Hide Controls";
+		} else {
+			ctrlText.text = "Show Controls";
+		}
+		seeCtrl = see;
 	}
 }
