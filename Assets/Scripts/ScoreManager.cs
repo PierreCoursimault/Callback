@@ -10,14 +10,16 @@ public class ScoreManager : MonoBehaviour {
 
 
     public int goal;
-    public float freezeDuration, freezeIntensity;
+    public float freezeDuration, slowDuration, fadeDuration;
     public string nextlevel;
     private Dictionary<PlayerController, int> players=new Dictionary<PlayerController, int>();
     private Dictionary<int, int> teams = new Dictionary<int, int>();
     private List<Text> scoreTexts = new List<Text>();
     private List<Text> healthTexts = new List<Text>();
+    private Dictionary<Rigidbody, Vector3> oldForces = new Dictionary<Rigidbody, Vector3>();
     private Text centralDisplay;
-    private bool waitingForA=false;
+    private bool waitingForA = false, score = false, slowed = false;
+    private List<Rigidbody> ballsRigidbodies = new List<Rigidbody>();
 
 
     // Use this for initialization
@@ -42,7 +44,7 @@ public class ScoreManager : MonoBehaviour {
             if (name == "CentralDisplay")
             {
                 centralDisplay = text;
-                StartCoroutine(FadeTextToZeroAlpha(0.6f, centralDisplay));
+                StartCoroutine(FadeTextToZeroAlpha(fadeDuration, centralDisplay));
             }
             foreach (KeyValuePair<PlayerController, int> player in players)
             {
@@ -63,6 +65,12 @@ public class ScoreManager : MonoBehaviour {
                 }
             }
         }
+        BallBehavior[] balls = FindObjectsOfType<BallBehavior>();
+
+        foreach (BallBehavior ball in balls)
+        {
+            ballsRigidbodies.Add(ball.GetComponent<Rigidbody>());
+        }
     }
 
     public void FixedUpdate()
@@ -75,6 +83,25 @@ public class ScoreManager : MonoBehaviour {
             }
         }
     }
+
+    public void SetScoreMode(bool mode, int score)
+    {
+        this.score = !mode;
+        if (this.score)
+        {
+            goal = score;
+        }
+        else
+        {
+            goal = -1;
+            foreach(PlayerController player in players.Keys)
+            {
+                player.health = score;
+            }
+        }
+    }
+
+
 
     private IEnumerator FadeTextToZeroAlpha(float t, Text i)
     {
@@ -119,7 +146,7 @@ public class ScoreManager : MonoBehaviour {
                     text.text = "Player " + player.player + " : " + players[player];
                 }
             }
-            if (players[player] <= 0)
+            if (players[player] <= 0 && !score)
             {
                 player.Die();
                 int survivant=-1;
@@ -196,13 +223,73 @@ public class ScoreManager : MonoBehaviour {
 
     public void Freeze()
     {
-        Time.timeScale = 1-freezeIntensity;
+        foreach (PlayerController player in players.Keys)
+        {
+            if (player != null) {
+                if (!oldForces.ContainsKey(player.GetComponent<Rigidbody>()))
+                {
+                    oldForces.Add(player.GetComponent<Rigidbody>(), player.GetComponent<Rigidbody>().velocity);
+                }
+                player.alive = false;
+                player.GetComponent<Rigidbody>().Sleep();
+            }
+        }
+        foreach(Rigidbody ball in ballsRigidbodies)
+        {
+            if (ball != null)
+            {
+                if (!oldForces.ContainsKey(ball.GetComponent<Rigidbody>()))
+                {
+                    oldForces.Add(ball.GetComponent<Rigidbody>(), ball.GetComponent<Rigidbody>().velocity);
+                    ball.Sleep();
+                }
+            }
+        }
+
         StartCoroutine(EndFreeze());
     }
 
     private IEnumerator EndFreeze()
     {
-        yield return new WaitForSeconds(freezeDuration*(1 - freezeIntensity));
-        Time.timeScale = 1;
+        yield return new WaitForSeconds(freezeDuration);
+
+
+        foreach (KeyValuePair<Rigidbody, Vector3> save in oldForces)
+        {
+            if (save.Key != null)
+            {
+                save.Key.GetComponent<Rigidbody>().WakeUp();
+            }
+        }
+        foreach(PlayerController player in players.Keys)
+        {
+            if (player != null)
+            {
+                player.alive = true;
+            }
+        }
+        if (slowDuration == 0)
+        {
+            foreach (KeyValuePair<Rigidbody, Vector3> save in oldForces)
+            {
+                if (save.Key != null)
+                {
+                    save.Key.velocity = save.Value;
+                }
+            }
+        }
+        for(float timer=0 ; timer<slowDuration ; timer += Time.deltaTime)
+        {
+            foreach (KeyValuePair<Rigidbody, Vector3> save in oldForces)
+            {
+                if (save.Key != null)
+                {
+                    save.Key.velocity=save.Value*timer/slowDuration;
+                }
+            }
+            yield return null;
+        }
+        oldForces.Clear();
+
     }
 }

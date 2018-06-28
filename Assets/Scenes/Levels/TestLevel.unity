@@ -1406,12 +1406,22 @@ Prefab:
     - target: {fileID: 114018560000674114, guid: 9774728cbe63978488ea5802301fa400,
         type: 2}
       propertyPath: freezeDuration
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 114018560000674114, guid: 9774728cbe63978488ea5802301fa400,
         type: 2}
       propertyPath: freezeIntensity
       value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 114018560000674114, guid: 9774728cbe63978488ea5802301fa400,
+        type: 2}
+      propertyPath: fadeDuration
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114018560000674114, guid: 9774728cbe63978488ea5802301fa400,
+        type: 2}
+      propertyPath: slowDuration
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9774728cbe63978488ea5802301fa400, type: 2}

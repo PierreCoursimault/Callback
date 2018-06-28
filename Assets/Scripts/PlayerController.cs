@@ -8,7 +8,9 @@ public class PlayerController : MonoBehaviour {
 	public int player, team, health, maxDashes;
 	[HideInInspector]
 	public Color flag;
-    private bool alive = true, attackDown = false, dashing = false, leftTriggerDown = false;
+    [HideInInspector]
+    public bool alive = true;
+    private bool attackDown = false, dashing = false, leftTriggerDown = false;
 	private Dash[] availableDashes;
     private int currentDash=0;
     [HideInInspector]
@@ -141,7 +143,6 @@ public class PlayerController : MonoBehaviour {
                 scoreManager.UpdateHealth(this, -1);
                 scoreManager.Freeze();
 			}
-
 		}
 	}
 
