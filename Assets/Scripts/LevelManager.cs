@@ -6,15 +6,21 @@ public class LevelManager : MonoBehaviour {
 
 	public GameObject[] balls;
 	private int mode=0;
-	private int entities=0;
 	private string modePPKey = "Mode" ;
+	private int entities=0;
 	private string entitiesPPKey = "Entities" ;
+	private int score;
+	private string scorePPKey = "Score";
+	private int scoreMode;
+	private string scoreModePPKey = "ScoreMode";
 
 
 	// Use this for initialization
 	void Start () {
 		mode = PlayerPrefs.GetInt (modePPKey);
 		entities = PlayerPrefs.GetInt (entitiesPPKey);
+		score = PlayerPrefs.GetInt (scorePPKey);
+		scoreMode = PlayerPrefs.GetInt (scoreModePPKey);
 		SetupGame ();
 	}
 	
@@ -26,6 +32,7 @@ public class LevelManager : MonoBehaviour {
 	void SetupGame(){
 		SetupMode ();
 		SetupEntities ();
+		SetupScore ();
 	}
 
 	void SetupMode(){
@@ -42,5 +49,9 @@ public class LevelManager : MonoBehaviour {
 			}
 				
 		}
+	}
+
+	void SetupScore(){
+		//gameObject.GetComponent<ScoreManager> ().SetScoreMode (scoreMode, score);
 	}
 }

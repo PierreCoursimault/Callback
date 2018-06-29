@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class SetupMenuManager : MonoBehaviour {
-
+	public GameObject[] menulayer;
 	public UnityEngine.UI.Text[] TexteMenu;
 	public GameObject[] modeBtn;
 	public GameObject[] levelBtn;
@@ -17,17 +17,40 @@ public class SetupMenuManager : MonoBehaviour {
 	public GameObject ControlPanel;
 	public UnityEngine.UI.Text ctrlText;
 
+	public GameObject dizaineObj;
+	public GameObject uniteObj;
+
+	public UnityEngine.UI.Text u_unit;
+	public UnityEngine.UI.Text u_diz;
+	public UnityEngine.UI.Text d_unit;
+	public UnityEngine.UI.Text d_diz;
+
+
 	private int mode=0;
 	private int level=0;
 	private int entities=0;
 	private int current=0;
+	private int diz = 0;
+	private int unit = 0;
+	private int scoreMode = 1;
 	private string modePPKey = "Mode" ;
 	private string lvlPPKey = "Level" ;
 	private string entitiesPPKey = "Entities" ;
+	private string scorePPKey = "Score" ;
+	private string scoreModePPKey = "ScoreMode";
 	private bool seeCtrl;
+	private int couchemenu;
+	private bool unitSelected = true;
+
+	private int timer;
+	private int timebeforeInput = 15;
 
 	// Use this for initialization
 	void Start () {
+		for (int i = 0; i < menulayer.Length ; i++) {
+			menulayer [i].SetActive (false);
+		}
+		SelectMenu (0);
 		LoadSetup ();
 		SetControlPanel (false);
 
@@ -35,13 +58,151 @@ public class SetupMenuManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetButtonDown("Valider")){
-			LaunchGame();
-		}
+		switch (couchemenu) {
+		case 0: //Setup Mode, level, entities
+			if(Input.GetButtonDown("Valider")){
+				SelectMenu (1);
+			}
 
-		if(Input.GetKeyDown(KeyCode.Joystick1Button2)){
-			SetControlPanel(!seeCtrl);
+			if(Input.GetKeyDown(KeyCode.Joystick1Button2)){
+				SetControlPanel(!seeCtrl);
+			}
+			break;
+		case 1: // Setup Score
+			if (Input.GetButtonDown ("Valider")) {
+				LaunchGame ();
+			}
+
+			if (timer > timebeforeInput) {
+				if (Input.GetAxis ("Horizontal1") > 0.5 || Input.GetAxis ("Horizontal1") < -0.5) {
+
+					if (unitSelected) {
+
+						unitSelected = false;
+						uniteObj.SetActive (false);
+						dizaineObj.SetActive (true);
+
+						timer = 0;
+
+					} else {
+
+						unitSelected = true;
+						uniteObj.SetActive (true);
+						dizaineObj.SetActive (false);
+
+						timer = 0;
+
+					}
+				}
+				if (Input.GetAxis ("Vertical1") > 0.5) {
+
+					if (unitSelected) {
+
+						if (unit != 9) {
+
+							unit++;
+							u_unit.text = unit.ToString ();
+							d_unit.text = unit.ToString ();
+
+							timer = 0;
+
+						} else {
+
+							if (diz != 9) {
+
+								unit = 0;
+								u_unit.text = unit.ToString ();
+								d_unit.text = unit.ToString ();
+
+								diz++;
+								u_diz.text = diz.ToString ();
+								d_diz.text = diz.ToString ();
+
+								timer = 0;
+
+							}
+
+						}
+
+					} else {
+
+						if (diz != 9) {
+
+							diz++;
+							u_diz.text = diz.ToString ();
+							d_diz.text = diz.ToString ();
+
+							timer = 0;
+
+						}
+
+					}
+
+				}
+
+				if (Input.GetAxis ("Vertical1") < -0.5) {
+
+					if (unitSelected) {
+
+						if (unit != 0) {
+
+							if (diz == 0 && unit == 1) {
+
+								// ne rien faire
+
+							} else {
+
+								unit--;
+
+								u_unit.text = unit.ToString ();
+								d_unit.text = unit.ToString ();
+
+								timer = 0;
+
+							}
+
+						} else {
+
+							if (diz != 0) {
+
+								unit = 9;
+								u_unit.text = unit.ToString ();
+								d_unit.text = unit.ToString ();
+
+								diz--;
+								u_diz.text = diz.ToString ();
+								d_diz.text = diz.ToString ();
+
+								timer = 0;
+
+							}
+
+						}
+
+					} else {
+
+						if (diz != 0) {
+
+							diz--;
+							u_diz.text = diz.ToString ();
+							d_diz.text = diz.ToString ();
+
+							timer = 0;
+
+						}
+
+					}
+
+				}
+			} else {
+				timer++;
+			}
+			break;
+
+		default:
+			break;
 		}
+			
 	}
 		
 
@@ -74,12 +235,16 @@ public class SetupMenuManager : MonoBehaviour {
 		PlayerPrefs.SetInt(modePPKey,mode);
 		PlayerPrefs.SetInt(lvlPPKey,level);
 		PlayerPrefs.SetInt(entitiesPPKey,entities);
+		PlayerPrefs.SetInt(scorePPKey, (diz*10+unit));
+		PlayerPrefs.SetInt (scoreModePPKey, scoreMode);
 	}
 
 	void LoadSetup(){
 		mode = PlayerPrefs.GetInt (modePPKey);
 		level = PlayerPrefs.GetInt (lvlPPKey);
 		entities = PlayerPrefs.GetInt (entitiesPPKey);
+		LoadScore(PlayerPrefs.GetInt (scorePPKey));
+		scoreMode = PlayerPrefs.GetInt (scoreModePPKey);
 		Debug.Log (mode + ";" + level + ";" + entities);
 		ValidMode (mode);
 		ValidLevel (level);
@@ -145,4 +310,20 @@ public class SetupMenuManager : MonoBehaviour {
 		}
 		seeCtrl = see;
 	}
+
+	public void SelectMenu(int menu){
+		menulayer [couchemenu].SetActive (false);
+		couchemenu = menu;
+		menulayer [couchemenu].SetActive (true);
+	}
+
+	private void LoadScore (int score){
+		diz = score / 10;
+		unit = score % 10;
+		u_unit.text = unit.ToString ();
+		d_unit.text = unit.ToString ();
+		u_diz.text = diz.ToString ();
+		d_diz.text = diz.ToString ();
+	}
+		
 }
