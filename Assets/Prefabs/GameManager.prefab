@@ -38,10 +38,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e55b481ac8e03546bdcb63258be6342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goal: -1
-  freezeDuration: 1
-  freezeIntensity: 0.9
+  goal: 3
+  mode: 0
+  freezeDuration: 0.5
+  slowDuration: 0.5
+  fadeDuration: 0.6
   nextlevel: TestLevel
+  launchWithoutMenu: 1
 --- !u!224 &224779686952557306
 RectTransform:
   m_ObjectHideFlags: 1

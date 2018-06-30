@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		flag = GetComponent<MeshRenderer>().material.color;
+        flag = GetComponent<MeshRenderer>().material.color;
 		myRb = GetComponent<Rigidbody> ();
         availableDashes = new Dash[maxDashes];
         for(int i = 0; i < maxDashes; i++)

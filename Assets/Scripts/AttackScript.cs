@@ -26,7 +26,8 @@ public class AttackScript : MonoBehaviour {
         }
         treatedColliders = new List<Collider>();
         this.team = player.team;
-        this.flag = player.flag;
+        this.flag = player.GetComponent<Renderer>().material.color;
+        GetComponent<Renderer>().material.color = new Color(flag.r*2, flag.g*2, flag.b*2, 0.5f);
         GetComponent<Collider>().enabled = false;
     }
 

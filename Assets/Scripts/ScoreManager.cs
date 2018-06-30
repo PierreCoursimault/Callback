@@ -9,16 +9,17 @@ using UnityEngine.SceneManagement;
 public class ScoreManager : MonoBehaviour {
 
 
-    public int goal;
+    public int goal, mode;
     public float freezeDuration, slowDuration, fadeDuration;
     public string nextlevel;
+    public bool launchWithoutMenu;
     private Dictionary<PlayerController, int> players=new Dictionary<PlayerController, int>();
     private Dictionary<int, int> teams = new Dictionary<int, int>();
     private List<Text> scoreTexts = new List<Text>();
     private List<Text> healthTexts = new List<Text>();
     private Dictionary<Rigidbody, Vector3> oldForces = new Dictionary<Rigidbody, Vector3>();
     private Text centralDisplay;
-    private bool waitingForA = false, score = false, slowed = false;
+    private bool waitingForA = false, slowed = false;
     private List<Rigidbody> ballsRigidbodies = new List<Rigidbody>();
 
 
@@ -36,40 +37,14 @@ public class ScoreManager : MonoBehaviour {
                 teams.Add(player.team, 0);
             }
         }
-        Text[] UIs=Component.FindObjectsOfType<Text>();
-        string name;
-        foreach (Text text in UIs)
-        {
-            name = text.name;
-            if (name == "CentralDisplay")
-            {
-                centralDisplay = text;
-                StartCoroutine(FadeTextToZeroAlpha(fadeDuration, centralDisplay));
-            }
-            foreach (KeyValuePair<PlayerController, int> player in players)
-            {
-                if(name == "Health" + player.Key.player)
-                {
-                    text.text = "Player " + player.Key.player + " : "+player.Value;
-                    healthTexts.Add(text);
-                    break;
-                }
-            }
-            foreach (KeyValuePair<int, int> team in teams)
-            {
-                if (name == "Score" + team.Key)
-                {
-                    text.text = "Team " + team.Key + " : " + team.Value;
-                    scoreTexts.Add(text);
-                    break;
-                }
-            }
-        }
         BallBehavior[] balls = FindObjectsOfType<BallBehavior>();
-
         foreach (BallBehavior ball in balls)
         {
             ballsRigidbodies.Add(ball.GetComponent<Rigidbody>());
+        }
+        if (launchWithoutMenu)
+        {
+            SetScoreMode(mode, goal);
         }
     }
 
@@ -84,19 +59,69 @@ public class ScoreManager : MonoBehaviour {
         }
     }
 
-    public void SetScoreMode(bool mode, int score)
+    public void SetScoreMode(int mode, int score)
     {
-        this.score = !mode;
-        if (this.score)
+        
+        this.mode = mode;
+        if (this.mode == 0)
         {
-            goal = score;
-        }
-        else
-        {
-            goal = -1;
             foreach(PlayerController player in players.Keys)
             {
                 player.health = score;
+            }
+        }
+        if (this.mode == 1)
+        {
+            goal = score;
+        }
+        initUI();
+    }
+
+    private void initUI()
+    {
+        Text[] UIs = Component.FindObjectsOfType<Text>();
+        string name;
+        foreach (Text text in UIs)
+        {
+            name = text.name;
+            if (name == "CentralDisplay")
+            {
+                centralDisplay = text;
+                StartCoroutine(FadeTextToZeroAlpha(fadeDuration, centralDisplay));
+            }
+            if (mode == 0)
+            {
+              if (name == "HealthTitle")
+                {
+                    text.text = "Health :";
+                    continue;
+                }
+                foreach (KeyValuePair<PlayerController, int> player in players)
+                {
+                    if (name == "Health" + player.Key.player)
+                    {
+                        text.text = "Player " + player.Key.player + " : " + player.Value;
+                        healthTexts.Add(text);
+                        break;
+                    }
+                }
+            }
+            if (mode == 1)
+            {
+                if (name == "ScoreTitle")
+                {
+                    text.text = "Score :";
+                    continue;
+                }
+                foreach (KeyValuePair<int, int> team in teams)
+                {
+                    if (name == "Score" + team.Key)
+                    {
+                        text.text = "Team " + team.Key + " : " + team.Value;
+                        scoreTexts.Add(text);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -115,7 +140,7 @@ public class ScoreManager : MonoBehaviour {
 
     public void UpdateScore(int team, int value)
     {
-        if (teams.ContainsKey(team))
+        if (teams.ContainsKey(team) && mode == 1)
         {
             int oldValue = teams[team];
             teams[team] = oldValue+value;
@@ -126,7 +151,7 @@ public class ScoreManager : MonoBehaviour {
                     text.text = "Team " + team + " : " + teams[team];
                 }
             }
-            if (goal != -1 && teams[team] >= goal)
+            if (teams[team] >= goal)
             {
                 Win("Team " +team);
             }
@@ -135,7 +160,7 @@ public class ScoreManager : MonoBehaviour {
 
     public void UpdateHealth(PlayerController player, int value)
     {
-        if (players.ContainsKey(player))
+        if (players.ContainsKey(player) && mode == 0)
         {
             int oldValue = players[player];
             players[player] = oldValue + value;
@@ -146,7 +171,7 @@ public class ScoreManager : MonoBehaviour {
                     text.text = "Player " + player.player + " : " + players[player];
                 }
             }
-            if (players[player] <= 0 && !score)
+            if (players[player] <= 0)
             {
                 player.Die();
                 int survivant=-1;
