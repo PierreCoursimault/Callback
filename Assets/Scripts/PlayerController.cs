@@ -141,7 +141,7 @@ public class PlayerController : MonoBehaviour {
                 scoreManager.UpdateScore(script.team, 1);
                 script.Reset();
                 scoreManager.UpdateHealth(this, -1);
-                scoreManager.Freeze();
+                scoreManager.TempFreeze();
 			}
 		}
 	}

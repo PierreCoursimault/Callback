@@ -11,7 +11,7 @@ public class ScoreManager : MonoBehaviour {
 
     public int goal, mode;
     public float freezeDuration, slowDuration, fadeDuration;
-    public string nextlevel;
+    public string menuLevel;
     public bool launchWithoutMenu;
     private Dictionary<PlayerController, int> players=new Dictionary<PlayerController, int>();
     private Dictionary<int, int> teams = new Dictionary<int, int>();
@@ -19,7 +19,7 @@ public class ScoreManager : MonoBehaviour {
     private List<Text> healthTexts = new List<Text>();
     private Dictionary<Rigidbody, Vector3> oldForces = new Dictionary<Rigidbody, Vector3>();
     private Text centralDisplay;
-    private bool waitingForA = false, slowed = false;
+    private bool waitingForA = false, pause = false;
     private List<Rigidbody> ballsRigidbodies = new List<Rigidbody>();
 
 
@@ -52,11 +52,48 @@ public class ScoreManager : MonoBehaviour {
     {
         if (waitingForA)
         {
-            if(Input.GetButtonDown("Validate1") || Input.GetButtonDown("Validate2") || Input.GetButtonDown("Validate3") || Input.GetButtonDown("Validate4"))
+            if (OnePlayerButtonControllerDown("0"))
             {
                 ChangeLevel();
             }
         }
+        if (pause)
+        {
+            if (Input.GetButtonDown("Pause1") || Input.GetButtonDown("Pause2") || Input.GetButtonDown("Pause3") || Input.GetButtonDown("Pause4"))
+            {
+                Unpause();
+            }
+            if (OnePlayerButtonControllerDown("1"))
+            {
+                Unpause();
+            }
+            if (OnePlayerButtonControllerDown("0"))
+            {
+                ChangeLevel();
+            }
+        }
+        else
+        {
+            if (Input.GetButtonDown("Pause1") || Input.GetButtonDown("Pause2") || Input.GetButtonDown("Pause3") || Input.GetButtonDown("Pause4"))
+            {
+                Pause();
+            }
+        }
+
+        
+    }
+
+    private bool OnePlayerButtonControllerDown(string button)
+    {
+        for(int i = 1; i <= 4; i++)
+        {
+            if(Input.GetKeyDown("joystick "+i+" button "+button))
+            {
+                return true;
+            }
+        }
+        return false;
+
     }
 
     public void SetScoreMode(int mode, int score)
@@ -74,10 +111,10 @@ public class ScoreManager : MonoBehaviour {
         {
             goal = score;
         }
-        initUI();
+        InitUI();
     }
 
-    private void initUI()
+    private void InitUI()
     {
         Text[] UIs = Component.FindObjectsOfType<Text>();
         string name;
@@ -126,8 +163,6 @@ public class ScoreManager : MonoBehaviour {
         }
     }
 
-
-
     private IEnumerator FadeTextToZeroAlpha(float t, Text i)
     {
         i.color = new Color(i.color.r, i.color.g, i.color.b, 1);
@@ -136,6 +171,21 @@ public class ScoreManager : MonoBehaviour {
             i.color = new Color(i.color.r, i.color.g, i.color.b, i.color.a - (Time.deltaTime / t));
             yield return null;
         }
+    }
+
+    private void Pause()
+    {
+        Freeze();
+        centralDisplay.text = "PAUSE\n\nUnpause (B)\nControls (X)\nGamerules (Y)\nBack to menu (A)";
+        centralDisplay.color = new Color(centralDisplay.color.r, centralDisplay.color.g, centralDisplay.color.b, 1);
+        pause = true;
+    }
+
+    private void Unpause()
+    {
+        centralDisplay.color = new Color(centralDisplay.color.r, centralDisplay.color.g, centralDisplay.color.b, 0);
+        StartCoroutine(EndFreeze(0));
+        pause = false;
     }
 
     public void UpdateScore(int team, int value)
@@ -211,6 +261,7 @@ public class ScoreManager : MonoBehaviour {
         {
             centralDisplay.text += "Team " + team.Key + " : " + team.Value+"\n\n";
         }
+        centralDisplay.text += "\n\n\nNext (A)";
         TestPerfect();
         centralDisplay.color= new Color(centralDisplay.color.r, centralDisplay.color.g, centralDisplay.color.b, 1);
         waitingForA = true;
@@ -243,14 +294,21 @@ public class ScoreManager : MonoBehaviour {
     private void ChangeLevel()
     {
         waitingForA = false;
-        SceneManager.LoadScene(nextlevel);
+        SceneManager.LoadScene(menuLevel);
     }
 
-    public void Freeze()
+    public void TempFreeze()
+    {
+        Freeze();
+        StartCoroutine(EndFreeze(freezeDuration));
+    }
+
+    private void Freeze()
     {
         foreach (PlayerController player in players.Keys)
         {
-            if (player != null) {
+            if (player != null)
+            {
                 if (!oldForces.ContainsKey(player.GetComponent<Rigidbody>()))
                 {
                     oldForces.Add(player.GetComponent<Rigidbody>(), player.GetComponent<Rigidbody>().velocity);
@@ -259,7 +317,7 @@ public class ScoreManager : MonoBehaviour {
                 player.GetComponent<Rigidbody>().Sleep();
             }
         }
-        foreach(Rigidbody ball in ballsRigidbodies)
+        foreach (Rigidbody ball in ballsRigidbodies)
         {
             if (ball != null)
             {
@@ -270,13 +328,11 @@ public class ScoreManager : MonoBehaviour {
                 }
             }
         }
-
-        StartCoroutine(EndFreeze());
     }
 
-    private IEnumerator EndFreeze()
+    private IEnumerator EndFreeze(float delay)
     {
-        yield return new WaitForSeconds(freezeDuration);
+        yield return new WaitForSeconds(delay);
 
 
         foreach (KeyValuePair<Rigidbody, Vector3> save in oldForces)
