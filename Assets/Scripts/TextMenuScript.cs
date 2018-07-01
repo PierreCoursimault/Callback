@@ -19,10 +19,16 @@ public class TextMenuScript : MonoBehaviour {
 	}
 
 	public void highlightText(){
+		if (img == null) {
+			img = GetComponent< UnityEngine.UI.Image> ();
+		}
 		img.sprite = highlight;
 	}
 
 	public void unlightText(){
+		if (img == null) {
+			img = GetComponent< UnityEngine.UI.Image> ();
+		}
 		img.sprite = unlight;
 	}
 }
