@@ -25,6 +25,15 @@ public class SetupMenuManager : MonoBehaviour {
 	public UnityEngine.UI.Text d_unit;
 	public UnityEngine.UI.Text d_diz;
 
+	public UnityEngine.UI.Text scoreText;
+	public UnityEngine.UI.Text vieText;
+	public Color scoreColor;
+	public Color vieColor;
+
+	public GameObject player1;
+	public GameObject player2;
+	public GameObject player3;
+	public GameObject player4;
 
 	private int mode=0;
 	private int level=0;
@@ -38,9 +47,25 @@ public class SetupMenuManager : MonoBehaviour {
 	private string entitiesPPKey = "Entities" ;
 	private string scorePPKey = "Score" ;
 	private string scoreModePPKey = "ScoreMode";
+	private string playerConfPPKey = "PlayerConfig";
 	private bool seeCtrl;
 	private int couchemenu;
 	private bool unitSelected = true;
+	private int nbPlayer=0;
+	private int codePlayer1=0;
+	private int codePlayer2=0;
+	private int codePlayer3=0;
+	private int codePlayer4=0;
+	private string playerConfig;
+
+	private bool joystick1Assign;
+	private bool joystick2Assign;
+	private bool joystick3Assign;
+	private bool joystick4Assign;
+
+
+
+
 
 	private int timer;
 	private int timebeforeInput = 15;
@@ -50,7 +75,7 @@ public class SetupMenuManager : MonoBehaviour {
 		for (int i = 0; i < menulayer.Length ; i++) {
 			menulayer [i].SetActive (false);
 		}
-		SelectMenu (0);
+		SelectMenu (2);
 		LoadSetup ();
 		SetControlPanel (false);
 
@@ -68,9 +93,18 @@ public class SetupMenuManager : MonoBehaviour {
 				SetControlPanel(!seeCtrl);
 			}
 			break;
+		
 		case 1: // Setup Score
 			if (Input.GetButtonDown ("Valider")) {
 				LaunchGame ();
+			}
+
+			if(Input.GetKeyDown(KeyCode.Joystick1Button2)){
+				if (scoreMode == 1) {
+					SetScoreMode (0);
+				} else {
+					SetScoreMode (1);
+				}
 			}
 
 			if (timer > timebeforeInput) {
@@ -199,6 +233,39 @@ public class SetupMenuManager : MonoBehaviour {
 			}
 			break;
 
+		case 2:
+		case 3:	
+			if (Input.GetKeyDown (KeyCode.A) ||Input.GetButtonDown ("Validate1") ) {
+				if (joystick1Assign == false) {
+					assignManetteToPlayer (1);
+					joystick1Assign = true;
+				}
+
+			}
+			if (Input.GetKeyDown (KeyCode.Z) ||Input.GetButtonDown ("Validate2")) {
+				if (joystick2Assign == false) {
+					assignManetteToPlayer (2);
+					joystick2Assign = true;
+				}
+			}
+			if (Input.GetKeyDown (KeyCode.E) ||Input.GetButtonDown ("Validate3")) {
+				if (joystick3Assign == false) {
+					assignManetteToPlayer (3);
+					joystick3Assign = true;
+				}
+
+			}
+			if (Input.GetKeyDown (KeyCode.R) ||Input.GetButtonDown ("Validate4")) {
+				if (joystick4Assign == false) {
+					assignManetteToPlayer (4);
+					joystick4Assign = true;
+				}
+			}
+			if (Input.GetButtonDown ("Valider") && nbPlayer>1) {
+				SelectMenu (0);
+			}
+			break;
+
 		default:
 			break;
 		}
@@ -237,6 +304,7 @@ public class SetupMenuManager : MonoBehaviour {
 		PlayerPrefs.SetInt(entitiesPPKey,entities);
 		PlayerPrefs.SetInt(scorePPKey, (diz*10+unit));
 		PlayerPrefs.SetInt (scoreModePPKey, scoreMode);
+		PlayerPrefs.SetString (playerConfPPKey,playerConfig);
 	}
 
 	void LoadSetup(){
@@ -244,13 +312,16 @@ public class SetupMenuManager : MonoBehaviour {
 		level = PlayerPrefs.GetInt (lvlPPKey);
 		entities = PlayerPrefs.GetInt (entitiesPPKey);
 		LoadScore(PlayerPrefs.GetInt (scorePPKey));
-		scoreMode = PlayerPrefs.GetInt (scoreModePPKey);
+		SetScoreMode(PlayerPrefs.GetInt (scoreModePPKey));
 		Debug.Log (mode + ";" + level + ";" + entities);
-		ValidMode (mode);
-		ValidLevel (level);
-		ValidEntities (entities);
-		UnlightAll ();
-		SelectMode ();
+		if (couchemenu == 0) {
+			ValidMode (mode);
+			ValidLevel (level);
+			ValidEntities (entities);
+			UnlightAll ();
+			SelectMode ();
+		}
+
 
 
 	}
@@ -315,6 +386,13 @@ public class SetupMenuManager : MonoBehaviour {
 		menulayer [couchemenu].SetActive (false);
 		couchemenu = menu;
 		menulayer [couchemenu].SetActive (true);
+		if (couchemenu == 0) {
+			ValidMode (mode);
+			ValidLevel (level);
+			ValidEntities (entities);
+			UnlightAll ();
+			SelectMode ();
+		}
 	}
 
 	private void LoadScore (int score){
@@ -325,5 +403,52 @@ public class SetupMenuManager : MonoBehaviour {
 		u_diz.text = diz.ToString ();
 		d_diz.text = diz.ToString ();
 	}
-		
+
+
+	private void SetScoreMode(int scmode){
+		if (scmode == 0) { //vie
+			vieText.gameObject.SetActive (true);
+			scoreText.gameObject.SetActive (false);
+			d_diz.color = vieColor;
+			u_unit.color = vieColor;
+			scoreMode = scmode;
+		} else { //score
+			vieText.gameObject.SetActive (false);
+			scoreText.gameObject.SetActive (true);
+			d_diz.color = scoreColor;
+			u_unit.color = scoreColor;
+			scoreMode = scmode;
+		}
+	}
+	private void assignManetteToPlayer(int manette){
+		if (nbPlayer < 4) {
+			nbPlayer++;
+			switch (nbPlayer) {
+			case 1:
+				codePlayer1 = manette;
+				player1.SetActive (true);
+				break;
+			case 2:
+				codePlayer2 = manette;
+				player2.SetActive (true);
+				break;
+			case 3:
+				codePlayer3 = manette;
+				player3.SetActive (true);
+				break;
+			case 4:
+				codePlayer4 = manette;
+				player4.SetActive (true);
+				break;
+			}
+			playerConfig =  nbPlayer + ";"+ codePlayer1 + ";" + codePlayer2 + ";" + codePlayer3 + ";" + codePlayer4;
+			//string[] playerConf;
+			//playerConf = playerConfig.Split(";"[0]);
+			Debug.Log(playerConfig);
+		}
+		if (nbPlayer == 1) {
+			SelectMenu (3);
+		}
+	}
+
 }
