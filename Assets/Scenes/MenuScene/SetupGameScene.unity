@@ -3747,7 +3747,10 @@ MonoBehaviour:
   - {fileID: 160888637}
   - {fileID: 594809923}
   - {fileID: 1201407299}
-  levelsName: []
+  levelsName:
+  - Map_Circle
+  - Map_Ellipse
+  - Map_Rectangle
   highlight: {r: 0.007843138, g: 0.85098046, b: 0.9843138, a: 1}
   unlight: {r: 1, g: 1, b: 1, a: 1}
   ControlPanel: {fileID: 481300134}

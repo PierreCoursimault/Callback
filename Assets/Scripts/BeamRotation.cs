@@ -17,7 +17,7 @@ public class BeamRotation : MonoBehaviour {
     {
         if (player.alive)
         {
-            Vector3 direction = new Vector3(Input.GetAxis("HorizontalDirection" + player.player), Input.GetAxis("VerticalDirection" + player.player), 0);
+			Vector3 direction = new Vector3(Input.GetAxis("HorizontalDirection" + player.controller), Input.GetAxis("VerticalDirection" + player.controller), 0);
             player.transform.rotation = Quaternion.LookRotation(player.transform.forward, direction);
         }
     }

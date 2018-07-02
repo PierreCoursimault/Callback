@@ -369,7 +369,7 @@ public class SetupMenuManager : MonoBehaviour {
 	public void LaunchGame(){
 		SaveSetup ();
 		//SceneManager.LoadScene (levelsName, LoadSceneMode.Single);
-		SceneManager.LoadScene("TestLevel");
+		SceneManager.LoadScene(levelsName[level]);
 	}
 
 	private void SetControlPanel(bool see){

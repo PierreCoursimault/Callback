@@ -62,7 +62,7 @@ public class LevelManager : MonoBehaviour {
 
 	void SetupScore(){
 		//scoreMode : 1=score a atteindre,0=vie
-		//gameObject.GetComponent<ScoreManager> ().SetScoreMode (scoreMode, score);
+		gameObject.GetComponent<ScoreManager> ().SetScoreMode (scoreMode, score,nbplayer);
 	}
 
 	void LoadPlayerPrefs(){
@@ -78,27 +78,27 @@ public class LevelManager : MonoBehaviour {
 		nbplayer = int.Parse(playerConfTab [0]);
 		if (nbplayer > 0) {
 			player1.SetActive (true);
-			player1.GetComponent<PlayerController> ().player =int.Parse(playerConfTab [1]);
+			player1.GetComponent<PlayerController> ().controller =int.Parse(playerConfTab [1]);
 		} else {
 			player1.SetActive (false);
 		}
 		if (nbplayer > 1) {
 			player2.SetActive (true);
-			player2.GetComponent<PlayerController> ().player =int.Parse(playerConfTab [2]);
+			player2.GetComponent<PlayerController> ().controller =int.Parse(playerConfTab [2]);
 		} else {
 			player2.SetActive (false);
 		}
 
 		if (nbplayer > 2) {
 			player3.SetActive (true);
-			player3.GetComponent<PlayerController> ().player = int.Parse(playerConfTab [3]);
+			player3.GetComponent<PlayerController> ().controller = int.Parse(playerConfTab [3]);
 		} else {
 			player3.SetActive (false);
 		}
 
 		if (nbplayer > 3) {
 			player4.SetActive (true);
-			player4.GetComponent<PlayerController> ().player = int.Parse(playerConfTab [4]);
+			player4.GetComponent<PlayerController> ().controller = int.Parse(playerConfTab [4]);
 		} else {
 			player4.SetActive (false);
 		}

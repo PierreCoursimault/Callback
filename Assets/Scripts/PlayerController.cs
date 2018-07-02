@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
 	public float movespeed, dashSpeed, attackDuration, dashDuration, attackCooldown, dashCooldown, colorDuration, colorDurationOnDash;
-	public int player, team, health, maxDashes;
+	public int player,controller, team, health, maxDashes;
 	[HideInInspector]
 	public Color flag;
     [HideInInspector]
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour {
 
     private void Move()
     {
-        dir = new Vector3(Input.GetAxis("Horizontal" + player), Input.GetAxis("Vertical" + player), 0);
+		dir = new Vector3(Input.GetAxis("Horizontal" + controller), Input.GetAxis("Vertical" + controller), 0);
         if (dashing)
         {
             myRb.AddForce(availableDashes[currentDash].GetForce(), ForceMode.VelocityChange);
@@ -58,8 +58,8 @@ public class PlayerController : MonoBehaviour {
 
     private void Act()
 	{
-        Vector3 orientation = new Vector3(Input.GetAxis("HorizontalDirection" + player), Input.GetAxis("VerticalDirection" + player), 0);
-        float triggers = Input.GetAxis("AttackOrDash" + player);
+		Vector3 orientation = new Vector3(Input.GetAxis("HorizontalDirection" + controller), Input.GetAxis("VerticalDirection" + controller), 0);
+		float triggers = Input.GetAxis("AttackOrDash" + controller);
 
         if(triggers > 0.1f && !leftTriggerDown)
         {
@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour {
         {
             leftTriggerDown = false;
         }
-        if(Input.GetButtonDown("Dash" + player))
+		if(Input.GetButtonDown("Dash" + controller))
         {
             TryDash();
         }
@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour {
         {
             personnalField.GetComponent<Renderer>().enabled = true;
             personnalBeam.GetComponent<Renderer>().enabled = false;
-            if (Input.GetButtonDown("Attack" + player) || triggers < -0.1f)
+			if (Input.GetButtonDown("Attack" + controller) || triggers < -0.1f)
             {
                 StartCoroutine(ShootField());
             }
@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour {
         {
             personnalField.GetComponent<Renderer>().enabled = false;
             personnalBeam.GetComponent<Renderer>().enabled = true;
-            if (Input.GetButtonDown("Attack" + player) || triggers < -0.1f)
+			if (Input.GetButtonDown("Attack" + controller) || triggers < -0.1f)
             {
                 StartCoroutine(ShootBeam());
             }
@@ -156,7 +156,7 @@ public class PlayerController : MonoBehaviour {
     {
         protected Vector3 force=Vector3.zero;
         private float speed, dashDuration, dashCooldown;
-        private int player;
+        private int controller;
         private PlayerController pawn;
         private bool cooldown = false;
         protected Dash next=null;
@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour {
         public Dash(PlayerController pawn)
         {
             this.pawn = pawn;
-            this.player = pawn.player;
+			this.controller = pawn.controller;
             this.speed = pawn.dashSpeed;
             this.dashDuration = pawn.dashDuration;
             this.dashCooldown = pawn.dashCooldown;
@@ -183,7 +183,7 @@ public class PlayerController : MonoBehaviour {
         public IEnumerator Launch()
         {
             this.cooldown = true;
-            Vector3 newForce = new Vector3(Input.GetAxis("Horizontal" + player), Input.GetAxis("Vertical" + player), 0);
+			Vector3 newForce = new Vector3(Input.GetAxis("Horizontal" + controller), Input.GetAxis("Vertical" + controller), 0);
             newForce.Normalize();
             newForce *= speed;
             pawn.dashing = true;

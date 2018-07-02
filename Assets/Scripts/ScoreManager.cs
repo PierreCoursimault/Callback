@@ -44,7 +44,7 @@ public class ScoreManager : MonoBehaviour {
         }
         if (launchWithoutMenu)
         {
-            SetScoreMode(mode, goal);
+            SetScoreMode(mode, goal,4);
         }
     }
 
@@ -96,9 +96,9 @@ public class ScoreManager : MonoBehaviour {
 
     }
 
-    public void SetScoreMode(int mode, int score)
+    public void SetScoreMode(int mode, int score,int nbplayer)
     {
-        
+		Debug.Log (score);
         this.mode = mode;
         if (this.mode == 0)
         {

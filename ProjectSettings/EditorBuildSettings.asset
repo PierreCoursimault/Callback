@@ -9,6 +9,12 @@ EditorBuildSettings:
     path: Assets/Scenes/MenuScene/SetupGameScene.unity
     guid: f7ddad59c79279640ab09921247da63d
   - enabled: 1
-    path: Assets/Scenes/Levels/TestLevel.unity
+    path: Assets/Scenes/Levels/Map_Circle.unity
+    guid: 575cdb7477a89c6408a39c0cd03687ce
+  - enabled: 1
+    path: Assets/Scenes/Levels/Map_Ellipse.unity
+    guid: 645bc85711c20f240aa66c7c783ac6e0
+  - enabled: 1
+    path: Assets/Scenes/Levels/Map_Rectangle.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects: {}

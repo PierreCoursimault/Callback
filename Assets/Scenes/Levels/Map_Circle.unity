@@ -113,6 +113,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &8808695 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1900955389362680, guid: 01df51272092da64cad62be7906cc389,
+    type: 2}
+  m_PrefabInternal: {fileID: 1325669871}
 --- !u!4 &55036695 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4086545980706106, guid: 01df51272092da64cad62be7906cc389,
@@ -146,7 +151,7 @@ Transform:
   - {fileID: 1108514815}
   - {fileID: 1297492212}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &215138627
 Prefab:
@@ -190,9 +195,19 @@ Prefab:
       propertyPath: team
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114118928018754012, guid: 01df51272092da64cad62be7906cc389,
+        type: 2}
+      propertyPath: controller
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 01df51272092da64cad62be7906cc389, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &253236347 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1900955389362680, guid: 01df51272092da64cad62be7906cc389,
+    type: 2}
+  m_PrefabInternal: {fileID: 757097153}
 --- !u!4 &265743773 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4086545980706106, guid: 01df51272092da64cad62be7906cc389,
@@ -307,7 +322,7 @@ Transform:
   - {fileID: 690834669}
   - {fileID: 969122117}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &431005921
 GameObject:
@@ -903,7 +918,7 @@ Transform:
   - {fileID: 1343261931}
   - {fileID: 1339877445}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &968939861
 Prefab:
@@ -1006,6 +1021,11 @@ Prefab:
         type: 2}
       propertyPath: nextlevel
       value: Map_Circle
+      objectReference: {fileID: 0}
+    - target: {fileID: 114018560000674114, guid: 9774728cbe63978488ea5802301fa400,
+        type: 2}
+      propertyPath: launchWithoutMenu
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9774728cbe63978488ea5802301fa400, type: 2}
@@ -1257,6 +1277,11 @@ Prefab:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 7ffcc50652c25c141a4eb91d994d8d93, type: 2}
+    - target: {fileID: 114118928018754012, guid: 01df51272092da64cad62be7906cc389,
+        type: 2}
+      propertyPath: controller
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 01df51272092da64cad62be7906cc389, type: 2}
   m_IsPrefabParent: 0
@@ -1659,6 +1684,39 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1574117667}
+--- !u!1 &1726071760 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1900955389362680, guid: 01df51272092da64cad62be7906cc389,
+    type: 2}
+  m_PrefabInternal: {fileID: 215138627}
+--- !u!1 &1737472267 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1742823015400496, guid: 9774728cbe63978488ea5802301fa400,
+    type: 2}
+  m_PrefabInternal: {fileID: 968939861}
+--- !u!114 &1737472268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1737472267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91849c08fc3d854489d3759672a7c7fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  balls:
+  - {fileID: 1343261930}
+  - {fileID: 1339877444}
+  player1: {fileID: 253236347}
+  player2: {fileID: 1726071760}
+  player3: {fileID: 1742568716}
+  player4: {fileID: 8808695}
+--- !u!1 &1742568716 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1900955389362680, guid: 01df51272092da64cad62be7906cc389,
+    type: 2}
+  m_PrefabInternal: {fileID: 1966981137}
 --- !u!1001 &1821079649
 Prefab:
   m_ObjectHideFlags: 0
@@ -1815,6 +1873,11 @@ Prefab:
     - target: {fileID: 114118928018754012, guid: 01df51272092da64cad62be7906cc389,
         type: 2}
       propertyPath: player
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114118928018754012, guid: 01df51272092da64cad62be7906cc389,
+        type: 2}
+      propertyPath: controller
       value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
