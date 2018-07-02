@@ -7,30 +7,39 @@ public class AttackScript : MonoBehaviour {
     private int team;
     private Color flag;
     public bool dashing;
-    public float ballSpeed;
+    public float ballForce, ballDashForce;
+    public float playerForce, playerDashForce;
     public float ballsColorDuration;
     private List<Collider> treatedColliders;
 
 
     // Use this for initialization
     void Start () {
+        PlayerController player=GetComponentInParent<PlayerController>();
         if (GetComponent<BeamRotation>() == null)
         {
-            GetComponentInParent<PlayerController>().personnalField = this;
+            player.personnalField = this;
         }
         else
         {
-            GetComponentInParent<PlayerController>().personnalBeam = this;
+            player.personnalBeam = this;
         }
         treatedColliders = new List<Collider>();
-        gameObject.SetActive(false);
+        this.team = player.team;
+        this.flag = player.GetComponent<Renderer>().material.color;
+        GetComponent<Renderer>().material.color = new Color(flag.r*2, flag.g*2, flag.b*2, 0.5f);
+        GetComponent<Collider>().enabled = false;
     }
 
-    public void OnActivation(int team, Color flag, bool dashing)
+    public void Activate(bool dashing)
     {
-        this.team = team;
-        this.flag = flag;
         this.dashing = dashing;
+        GetComponent<Collider>().enabled=true;
+    }
+
+    public void Desactivate()
+    {
+        GetComponent<Collider>().enabled = false;
         treatedColliders = new List<Collider>();
     }
 
@@ -44,11 +53,25 @@ public class AttackScript : MonoBehaviour {
             movement.Normalize();
             if (dashing)
             {
-                movement *= 2*ballSpeed;
+                movement *= ballDashForce;
             }
             else
             {
-                movement *= ballSpeed;
+                movement *= ballForce;
+            }
+            collider.GetComponent<Rigidbody>().AddForce(movement);
+        }
+        if (collider.tag=="Player")
+        {
+            Vector3 movement = collider.transform.position - this.transform.position;
+            movement.Normalize();
+            if (dashing)
+            {
+                movement *= playerDashForce;
+            }
+            else
+            {
+                movement *= playerForce;
             }
             collider.GetComponent<Rigidbody>().AddForce(movement);
         }
