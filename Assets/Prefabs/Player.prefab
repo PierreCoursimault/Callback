@@ -106,7 +106,7 @@ Transform:
   m_GameObject: {fileID: 1221463507172936}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.4, y: 1.4, z: 0.5}
+  m_LocalScale: {x: 2.2573967, y: 2.2573977, z: 0.13}
   m_Children: []
   m_Father: {fileID: 4086545980706106}
   m_RootOrder: 0
@@ -277,6 +277,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8f0c318a953204478412c05af38a250, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
+  movespeed: 2
+  dashSpeed: 15
+  attackDuration: 0.5
+  dashDuration: 0.05
+  attackCooldown: 0.5
+  dashCooldown: 5
+  colorDuration: 5
+  colorDurationOnDash: 5
+=======
   movespeed: 2.15
   dashSpeed: 10
   attackDuration: 0.01
@@ -285,6 +295,7 @@ MonoBehaviour:
   dashCooldown: 7
   colorDuration: 2.5
   colorDurationOnDash: 4
+>>>>>>> refs/remotes/origin/master
   player: 1
   team: 1
   health: 3
@@ -305,10 +316,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dashing: 0
+<<<<<<< HEAD
+  ballSpeed: 6000
+=======
   ballForce: 1500
   ballDashForce: 3000
   playerForce: 1000
   playerDashForce: 1500
+>>>>>>> refs/remotes/origin/master
   ballsColorDuration: 3.5
 --- !u!114 &114465894994200958
 MonoBehaviour:
@@ -333,10 +348,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dashing: 0
+<<<<<<< HEAD
+  ballSpeed: 12000
+=======
   ballForce: 3000
   ballDashForce: 7000
   playerForce: 1500
   playerDashForce: 3000
+>>>>>>> refs/remotes/origin/master
   ballsColorDuration: 3.5
 --- !u!135 &135585948882214138
 SphereCollider:
