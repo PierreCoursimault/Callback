@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Levels/Map_Ellipse.unity
+- path: Assets/Scenes/MenuScene/SetupGameScene.unity
   isLoaded: 1
   isActive: 1
