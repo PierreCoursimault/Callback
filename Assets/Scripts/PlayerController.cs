@@ -18,10 +18,12 @@ public class PlayerController : MonoBehaviour {
 	private Rigidbody myRb;
 	private Vector3 dir;
     private ScoreManager scoreManager;
+	private Rotate rot;
 
 
     // Use this for initialization
     void Start () {
+		rot = GetComponent<Rotate> ();
         flag = GetComponent<MeshRenderer>().material.color;
 		myRb = GetComponent<Rigidbody> ();
         availableDashes = new Dash[maxDashes];
@@ -76,6 +78,7 @@ public class PlayerController : MonoBehaviour {
         }
         if (orientation == Vector3.zero)
         {
+			rot._isAiming = false;
             personnalField.GetComponent<Renderer>().enabled = true;
             personnalBeam.GetComponent<Renderer>().enabled = false;
 			if (Input.GetButtonDown("Attack" + controller) || triggers < -0.1f)
@@ -84,7 +87,7 @@ public class PlayerController : MonoBehaviour {
             }
         }
         else
-        {
+		{	rot._isAiming = true;
             personnalField.GetComponent<Renderer>().enabled = false;
             personnalBeam.GetComponent<Renderer>().enabled = true;
 			if (Input.GetButtonDown("Attack" + controller) || triggers < -0.1f)

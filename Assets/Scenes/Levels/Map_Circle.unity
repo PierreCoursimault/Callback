@@ -836,7 +836,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4086545980706106, guid: 01df51272092da64cad62be7906cc389, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 3
+      value: 5.269
       objectReference: {fileID: 0}
     - target: {fileID: 4086545980706106, guid: 01df51272092da64cad62be7906cc389, type: 2}
       propertyPath: m_LocalPosition.z
@@ -865,26 +865,6 @@ Prefab:
     - target: {fileID: 1900955389362680, guid: 01df51272092da64cad62be7906cc389, type: 2}
       propertyPath: m_Name
       value: Player 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114118928018754012, guid: 01df51272092da64cad62be7906cc389,
-        type: 2}
-      propertyPath: attackDuration
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 114118928018754012, guid: 01df51272092da64cad62be7906cc389,
-        type: 2}
-      propertyPath: attackCooldown
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114138380330450648, guid: 01df51272092da64cad62be7906cc389,
-        type: 2}
-      propertyPath: ballSpeed
-      value: 15000
-      objectReference: {fileID: 0}
-    - target: {fileID: 114606254594145762, guid: 01df51272092da64cad62be7906cc389,
-        type: 2}
-      propertyPath: ballSpeed
-      value: 50000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 01df51272092da64cad62be7906cc389, type: 2}
