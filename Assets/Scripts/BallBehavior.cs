@@ -25,7 +25,7 @@ public class BallBehavior : MonoBehaviour {
 
     public void Reset()
     {
-        this.GetComponent<MeshRenderer>().material.color = Color.white;
         this.team = -1;
+        this.GetComponent<MeshRenderer>().material.color = Color.white;
     }
 }

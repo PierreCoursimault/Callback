@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
@@ -24,7 +23,7 @@ public class PlayerController : MonoBehaviour {
     // Use this for initialization
     void Start () {
 		rot = GetComponent<Rotate> ();
-        flag = GetComponent<MeshRenderer>().material.color;
+        flag = GetComponent<Renderer>().material.color;
 		myRb = GetComponent<Rigidbody> ();
         availableDashes = new Dash[maxDashes];
         for(int i = 0; i < maxDashes; i++)
@@ -62,7 +61,6 @@ public class PlayerController : MonoBehaviour {
 	{
 		Vector3 orientation = new Vector3(Input.GetAxis("HorizontalDirection" + controller), Input.GetAxis("VerticalDirection" + controller), 0);
 		float triggers = Input.GetAxis("AttackOrDash" + controller);
-
         if(triggers > 0.1f && !leftTriggerDown)
         {
             leftTriggerDown = true;
@@ -145,7 +143,7 @@ public class PlayerController : MonoBehaviour {
                 script.Reset();
                 scoreManager.UpdateHealth(this, -1);
                 scoreManager.TempFreeze();
-			}
+            }
 		}
 	}
 
